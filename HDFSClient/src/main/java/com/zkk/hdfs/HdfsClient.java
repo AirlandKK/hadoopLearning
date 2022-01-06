@@ -38,10 +38,10 @@ public class HdfsClient {
     @BeforeEach //Before 被 BeforeEach代替了
     public void init() throws URISyntaxException, IOException, InterruptedException {
         //连接集群nn地址
-        URI uri = new URI("hdfs://ZKK01:9000"); //9000 内部通信端口有的可能为8020看core-site.xml设置，外部页面9870
+        URI uri = new URI("hdfs://ZKK01:8020"); //9000 内部通信端口有的可能为8020看core-site.xml设置，外部页面9870
         //创建一个配置文件
         Configuration configuration = new Configuration();
-
+        configuration.set("dfs.client.use.datanode.hostname", "true");
         //用户
         String user = "root";
         //1.获取到了客户端对象
@@ -54,11 +54,19 @@ public class HdfsClient {
         fs.close();
     }
 
+    //创建目录
     @Test
     public void testmkdir() throws  IOException {
         //2.创建一个文件夹
         fs.mkdirs(new Path("/xiyou/huaguoshan1"));
 
+    }
+
+    //上传
+    @Test
+    public void testPut() throws IOException {
+        // 参数解读：参数一：表示删除原数据 参数二：是否覆盖 参数三：原数据路径 参数四：目的地路径
+        fs.copyFromLocalFile(false,false,new Path("F:\\sunwukong1.txt"),new Path("/xiyou/huaguoshan1"));
     }
 }
 
