@@ -24,6 +24,12 @@
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-client</artifactId>
             <version>3.3.1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
@@ -37,7 +43,13 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.32</version>
-            <scope>test</scope>
+<!--            <scope>test</scope>-->
+            <!-- SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+没错，就是毁在这段代码上 <scope>test</scope> ，
+test表示只有在测试环境下，才可以使用，而我springboot是运行在main方法中，
+是不属于测试环境，所以这个包就相当于没有加入依赖，也就没有被加载到。
+改成compile则表示编译的时候就会加载此jar包，那么最后就运行成功了，成功的日志如下：-->
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>
@@ -49,8 +61,10 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+<!--                    <source>11</source>-->
+<!--                    <target>11</target>-->
+                    <source>8</source>
+                    <target>8</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
